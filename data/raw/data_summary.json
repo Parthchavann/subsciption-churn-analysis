@@ -1,0 +1,9 @@
+{
+    "total_users": 1000,
+    "active_subscriptions": 7238,
+    "churned_users": 149,
+    "total_revenue": 130646.13,
+    "avg_engagement_score": 0.596,
+    "total_support_tickets": 614,
+    "churn_rate": 14.9
+}
