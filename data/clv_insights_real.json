@@ -1,0 +1,108 @@
+{
+  "executive_summary": {
+    "total_customers": 7043,
+    "total_revenue": 16056168.7,
+    "average_clv": 2819.82,
+    "churn_rate": 26.5,
+    "avg_monthly_revenue": 64.76
+  },
+  "segment_insights": {
+    "Premium Value": {
+      "customer_count": 1760,
+      "avg_clv": 6686.93,
+      "churn_rate": 10.7,
+      "avg_tenure": 60.9
+    },
+    "High Value": {
+      "customer_count": 1761,
+      "avg_clv": 3012.21,
+      "churn_rate": 20.7,
+      "avg_tenure": 37.3
+    },
+    "Medium Value": {
+      "customer_count": 1761,
+      "avg_clv": 1249.53,
+      "churn_rate": 20.8,
+      "avg_tenure": 25.5
+    },
+    "Low Value": {
+      "customer_count": 1761,
+      "avg_clv": 332.8,
+      "churn_rate": 53.9,
+      "avg_tenure": 5.8
+    }
+  },
+  "contract_insights": {
+    "Month-to-month": {
+      "count": 3875,
+      "avg_clv": 1791.8002838709676,
+      "avg_monthly_revenue": 66.39849032258064,
+      "avg_tenure": 18.036645161290323,
+      "churn_rate": 0.4270967741935484,
+      "total_revenue": 5305861.5
+    },
+    "One year": {
+      "count": 1473,
+      "avg_clv": 3698.188255261371,
+      "avg_monthly_revenue": 65.04860828241684,
+      "avg_tenure": 42.044806517311606,
+      "churn_rate": 0.11269517990495587,
+      "total_revenue": 4467053.5
+    },
+    "Two year": {
+      "count": 1695,
+      "avg_clv": 4406.690442477876,
+      "avg_monthly_revenue": 60.770412979351036,
+      "avg_tenure": 56.73510324483776,
+      "churn_rate": 0.02831858407079646,
+      "total_revenue": 6283253.7
+    }
+  },
+  "revenue_opportunities": {
+    "current_state": {
+      "total_revenue": 16056168.7,
+      "churn_rate": 0.2653698707936959,
+      "customers": 7043
+    },
+    "scenarios": {
+      "reduce_churn_10%": {
+        "description": "Reduce churn by 10%",
+        "revenue_impact": 1605616.87,
+        "retention_cost": 352150,
+        "net_benefit": 1253466.87,
+        "roi": 3.559468607127645,
+        "payback_months": 2.6318856502796955
+      },
+      "reduce_churn_15%": {
+        "description": "Reduce churn by 15%",
+        "revenue_impact": 2408425.3049999997,
+        "retention_cost": 352150,
+        "net_benefit": 2056275.3049999997,
+        "roi": 5.839202910691466,
+        "payback_months": 1.7545904335197975
+      },
+      "premium_retention": {
+        "description": "Focus on premium customer retention",
+        "revenue_impact": 2353800.67,
+        "retention_cost": 352150,
+        "net_benefit": 2001650.67,
+        "roi": 5.684085389748686,
+        "payback_months": 1.7953092009273668
+      }
+    }
+  },
+  "key_findings": [
+    "Total revenue at risk: $16,056,168.70",
+    "Current churn rate: 26.5%",
+    "Best performing contract: Two year ($4406.69 avg CLV)",
+    "Highest risk segment: Low Value (53.9% churn)",
+    "Premium segment: 1760 customers"
+  ],
+  "recommendations": [
+    "Focus retention on Low Value segment customers",
+    "Promote Two year contracts to increase CLV",
+    "Implement predictive churn alerts for Premium Value customers",
+    "Target 15% churn reduction for $2,408,425.30 impact",
+    "Develop customer success programs for high-value segments"
+  ]
+}
