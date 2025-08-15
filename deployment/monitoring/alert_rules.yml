@@ -1,0 +1,29 @@
+groups:
+- name: churn_analysis_alerts
+  rules:
+  - alert: HighChurnRate
+    expr: churn_rate > 0.3
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High churn rate detected"
+      description: "Churn rate is {{ $value }}% which is above threshold"
+      
+  - alert: ApplicationDown
+    expr: up{job="churn-analysis"} == 0
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Churn analysis application is down"
+      description: "Application has been down for more than 2 minutes"
+      
+  - alert: DatabaseConnectionError
+    expr: database_connections_active / database_connections_max > 0.9
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Database connection pool nearly exhausted"
+      description: "{{ $value }}% of database connections are in use"

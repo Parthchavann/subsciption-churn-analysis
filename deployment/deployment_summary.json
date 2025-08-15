@@ -1,0 +1,48 @@
+{
+  "deployment_info": {
+    "project": "Subscription Churn Analysis",
+    "version": "2.0.0",
+    "deployment_date": "2025-01-15",
+    "environment": "production"
+  },
+  "services": {
+    "main_app": {
+      "port": 8501,
+      "description": "Main Streamlit dashboard",
+      "health_check": "http://localhost:8501/_stcore/health"
+    },
+    "api": {
+      "port": 8080,
+      "description": "REST API and metrics endpoint",
+      "health_check": "http://localhost:8080/health"
+    },
+    "database": {
+      "port": 5432,
+      "description": "PostgreSQL database",
+      "type": "postgres:15"
+    },
+    "monitoring": {
+      "prometheus": "http://localhost:9090",
+      "grafana": "http://localhost:3000"
+    }
+  },
+  "deployment_features": [
+    "Docker containerization",
+    "Kubernetes support",
+    "Automated CI/CD pipeline",
+    "Prometheus monitoring",
+    "Grafana dashboards",
+    "Redis caching",
+    "PostgreSQL database",
+    "Nginx reverse proxy",
+    "Health checks",
+    "Backup scripts"
+  ],
+  "security_features": [
+    "Non-root user in containers",
+    "Environment variable secrets",
+    "SSL/TLS support",
+    "Rate limiting",
+    "CORS protection"
+  ]
+}
