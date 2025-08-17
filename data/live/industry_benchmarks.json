@@ -1,0 +1,68 @@
+{
+  "saas_metrics": {
+    "median_churn_rate": {
+      "B2B_SMB": 5.0,
+      "B2B_Enterprise": 1.0,
+      "B2C_Media": 6.5,
+      "B2C_Fitness": 8.0
+    },
+    "median_ltv_cac_ratio": {
+      "Early_Stage": 3.0,
+      "Growth_Stage": 5.0,
+      "Mature": 7.0
+    },
+    "gross_revenue_retention": {
+      "Best_in_Class": 97,
+      "Good": 90,
+      "Needs_Improvement": 85
+    }
+  },
+  "pricing_benchmarks": {
+    "streaming_video": {
+      "basic_tier": {
+        "min": 4.99,
+        "median": 8.99,
+        "max": 12.99
+      },
+      "premium_tier": {
+        "min": 12.99,
+        "median": 15.99,
+        "max": 19.99
+      },
+      "family_tier": {
+        "min": 15.99,
+        "median": 19.99,
+        "max": 24.99
+      }
+    },
+    "streaming_music": {
+      "individual": {
+        "min": 9.99,
+        "median": 9.99,
+        "max": 11.99
+      },
+      "family": {
+        "min": 14.99,
+        "median": 16.99,
+        "max": 19.99
+      },
+      "student": {
+        "min": 4.99,
+        "median": 5.99,
+        "max": 6.99
+      }
+    }
+  },
+  "market_trends": {
+    "subscription_economy_growth": 435.0,
+    "churn_reduction_impact": 5,
+    "price_elasticity": -0.8,
+    "seasonal_patterns": {
+      "Q1": -5.2,
+      "Q2": 2.1,
+      "Q3": 1.8,
+      "Q4": 8.3
+    }
+  },
+  "last_updated": "2025-08-15T11:32:54.744388"
+}

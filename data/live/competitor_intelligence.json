@@ -1,0 +1,66 @@
+{
+  "streaming_leaders": {
+    "Netflix": {
+      "subscribers": 238000000,
+      "revenue": 31504000000,
+      "churn_rate": 2.4,
+      "arpu": 11.18,
+      "content_spend": 17000000000,
+      "market_share": 6.9,
+      "growth_rate": 1.9
+    },
+    "Disney+": {
+      "subscribers": 150200000,
+      "revenue": 5500000000,
+      "churn_rate": 4.0,
+      "arpu": 3.05,
+      "content_spend": 7000000000,
+      "market_share": 4.3,
+      "growth_rate": 7.4
+    },
+    "Amazon_Prime": {
+      "subscribers": 200000000,
+      "revenue": 25200000000,
+      "churn_rate": 2.8,
+      "arpu": 10.5,
+      "content_spend": 7000000000,
+      "market_share": 5.8,
+      "growth_rate": 13.0
+    }
+  },
+  "music_streaming": {
+    "Spotify": {
+      "subscribers": 220000000,
+      "revenue": 13200000000,
+      "churn_rate": 3.9,
+      "arpu": 5.0,
+      "market_share": 30.5,
+      "growth_rate": 15.0
+    },
+    "Apple_Music": {
+      "subscribers": 88000000,
+      "revenue": 7800000000,
+      "churn_rate": 2.1,
+      "arpu": 7.4,
+      "market_share": 13.7,
+      "growth_rate": 6.4
+    }
+  },
+  "market_analysis": {
+    "total_addressable_market": 1200000000000,
+    "annual_growth_rate": 18.0,
+    "key_trends": [
+      "Bundle consolidation driving market share shifts",
+      "Ad-supported tiers gaining adoption",
+      "International expansion critical for growth",
+      "Content localization becoming competitive advantage"
+    ],
+    "disruption_factors": [
+      "Economic recession impact on discretionary spending",
+      "Password sharing crackdowns affecting growth",
+      "Regulatory changes in key markets",
+      "Technology shifts (AR/VR content)"
+    ]
+  },
+  "last_updated": "2025-08-15T11:32:54.747580"
+}

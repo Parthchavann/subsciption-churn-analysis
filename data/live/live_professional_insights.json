@@ -1,0 +1,131 @@
+{
+  "executive_summary": {
+    "generated_at": "2025-08-15T11:32:54.771492",
+    "data_sources": [
+      "Market Data",
+      "Economic Indicators",
+      "Industry Benchmarks",
+      "Competitor Intelligence"
+    ],
+    "key_findings": [
+      "Churn performance: Below Average vs industry (Ours: 26.5% vs Avg: 3.04%)",
+      "Top revenue opportunity: Churn reduction program - $4,254,884.71 revenue protection"
+    ]
+  },
+  "market_context": {
+    "market_sentiment": "Mixed",
+    "subscription_sector_performance": {},
+    "economic_impact": {
+      "consumer_confidence": {
+        "value": 102.3,
+        "change": 2.1,
+        "impact": "Positive for discretionary subscriptions",
+        "last_updated": "2025-08-15T11:32:54.741296"
+      },
+      "employment_outlook": {
+        "value": 3.7,
+        "change": -0.2,
+        "impact": "Lower unemployment supports subscription growth",
+        "last_updated": "2025-08-15T11:32:54.741305"
+      },
+      "inflation_pressure": {
+        "value": 3.2,
+        "change": 0.1,
+        "impact": "Moderate inflation may pressure pricing",
+        "last_updated": "2025-08-15T11:32:54.741306"
+      },
+      "spending_power": {
+        "value": 105.8,
+        "change": 1.3,
+        "impact": "Increased disposable income supports premium tiers",
+        "last_updated": "2025-08-15T11:32:54.741307"
+      }
+    },
+    "key_factors": []
+  },
+  "competitive_positioning": {
+    "market_position": "Analysis unavailable",
+    "churn_benchmarking": {
+      "our_rate": 26.5,
+      "industry_average": 3.04,
+      "performance": "Below Average",
+      "improvement_needed": 23.46
+    },
+    "revenue_benchmarking": {},
+    "growth_comparison": {}
+  },
+  "industry_benchmarking": {
+    "churn_rate_comparison": {
+      "our_rate": 26.5,
+      "industry_median": 6.5,
+      "percentile": "Below 25th percentile",
+      "improvement_opportunity": 20.0
+    },
+    "revenue_metrics": {},
+    "growth_potential": {},
+    "recommendations": []
+  },
+  "strategic_recommendations": [
+    {
+      "priority": "High",
+      "category": "Customer Retention",
+      "recommendation": "Implement aggressive churn reduction program",
+      "rationale": "Current churn rate 26.5% vs industry 3.04%",
+      "expected_impact": "15-25% churn reduction",
+      "timeline": "3-6 months"
+    },
+    {
+      "priority": "Medium",
+      "category": "Market Expansion",
+      "recommendation": "Accelerate customer acquisition",
+      "rationale": "Market growing at 18.0% annually",
+      "expected_impact": "20-30% user growth",
+      "timeline": "6-12 months"
+    }
+  ],
+  "risk_assessment": {
+    "economic_risks": [],
+    "competitive_risks": [],
+    "market_risks": [
+      {
+        "risk": "Economic recession impact on discretionary spending",
+        "impact": "Moderate to High",
+        "monitoring_required": true
+      },
+      {
+        "risk": "Password sharing crackdowns affecting growth",
+        "impact": "Moderate to High",
+        "monitoring_required": true
+      },
+      {
+        "risk": "Regulatory changes in key markets",
+        "impact": "Moderate to High",
+        "monitoring_required": true
+      },
+      {
+        "risk": "Technology shifts (AR/VR content)",
+        "impact": "Moderate to High",
+        "monitoring_required": true
+      }
+    ],
+    "mitigation_strategies": []
+  },
+  "opportunity_analysis": {
+    "market_opportunities": [
+      {
+        "opportunity": "Market growing at 18.0% annually",
+        "potential": "High",
+        "action": "Accelerate acquisition and expand market share"
+      }
+    ],
+    "competitive_opportunities": [],
+    "customer_opportunities": [],
+    "revenue_opportunities": [
+      {
+        "opportunity": "Churn reduction program",
+        "potential_impact": "$4,254,884.71 revenue protection",
+        "timeline": "6-12 months"
+      }
+    ]
+  }
+}
