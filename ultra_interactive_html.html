@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Ultra Interactive Live Churn Analytics</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .main-header {
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .metric-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid var(--primary-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .metric-change {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .metric-change.positive { color: var(--success-color); }
+        .metric-change.negative { color: var(--danger-color); }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .alert-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .alert-item {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .alert-item:hover {
+            transform: scale(1.02);
+        }
+        
+        .alert-danger { background-color: #f8d7da; border-left: 4px solid var(--danger-color); }
+        .alert-warning { background-color: #fff3cd; border-left: 4px solid var(--warning-color); }
+        .alert-success { background-color: #d4edda; border-left: 4px solid var(--success-color); }
+        .alert-info { background-color: #d1ecf1; border-left: 4px solid var(--info-color); }
+        
+        .control-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .live-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background-color: var(--success-color);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+        }
+        
+        .tab-content {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .btn-custom {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            color: white;
+        }
+        
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .status-live { background-color: var(--success-color); color: white; }
+        .status-offline { background-color: var(--danger-color); color: white; }
+        .status-processing { background-color: var(--warning-color); color: white; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="main-header">
+            <h1><i class="fas fa-rocket"></i> Ultra Interactive Live Churn Analytics</h1>
+            <p class="mb-0">Real-time subscription analytics with live data feeds and advanced interactivity</p>
+            <div class="mt-3">
+                <span class="live-indicator"></span>
+                <span class="ms-2">Live Data Active</span>
+                <span class="ms-4"><i class="fas fa-clock"></i> Last Update: <span id="lastUpdate">Loading...</span></span>
+            </div>
+        </div>
+        
+        <!-- Live Metrics Row -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="metric-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-1"><i class="fas fa-bullseye"></i> Churn Rate</h6>
+                            <div class="metric-value" id="churnRate">14.9%</div>
+                            <div class="metric-change" id="churnChange">+0.2%</div>
+                        </div>
+                        <div class="text-primary">
+                            <i class="fas fa-chart-line fa-3x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-1"><i class="fas fa-dollar-sign"></i> Monthly Revenue</h6>
+                            <div class="metric-value" id="monthlyRevenue">$10,887</div>
+                            <div class="metric-change" id="revenueChange">+$245</div>
+                        </div>
+                        <div class="text-success">
+                            <i class="fas fa-money-bill-wave fa-3x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-1"><i class="fas fa-chart-bar"></i> ARPU</h6>
+                            <div class="metric-value" id="arpu">$18.05</div>
+                            <div class="metric-change" id="arpuChange">+$0.50</div>
+                        </div>
+                        <div class="text-info">
+                            <i class="fas fa-user-friends fa-3x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-1"><i class="fas fa-users"></i> Active Users</h6>
+                            <div class="metric-value" id="activeUsers">1,000</div>
+                            <div class="metric-change" id="usersChange">+5</div>
+                        </div>
+                        <div class="text-warning">
+                            <i class="fas fa-user-check fa-3x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Control Panel -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="control-panel">
+                    <div class="row align-items-center">
+                        <div class="col-md-2">
+                            <label class="form-label"><i class="fas fa-calendar"></i> Time Range</label>
+                            <select class="form-select" id="timeRange">
+                                <option value="24h">Last 24 Hours</option>
+                                <option value="7d">Last 7 Days</option>
+                                <option value="30d" selected>Last 30 Days</option>
+                                <option value="90d">Last 90 Days</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label"><i class="fas fa-filter"></i> Segment</label>
+                            <select class="form-select" id="customerSegment">
+                                <option value="all">All Customers</option>
+                                <option value="high-value">High Value</option>
+                                <option value="at-risk">At Risk</option>
+                                <option value="new">New Users</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label"><i class="fas fa-sync"></i> Auto Refresh</label>
+                            <div class="form-check form-switch mt-2">
+                                <input class="form-check-input" type="checkbox" id="autoRefresh" checked>
+                                <label class="form-check-label" for="autoRefresh">Live Updates</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label"><i class="fas fa-bell"></i> Alerts</label>
+                            <div class="form-check form-switch mt-2">
+                                <input class="form-check-input" type="checkbox" id="alertsEnabled" checked>
+                                <label class="form-check-label" for="alertsEnabled">Enable Alerts</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">&nbsp;</label>
+                            <div class="d-flex gap-2 mt-2">
+                                <button class="btn btn-custom" onclick="refreshData()">
+                                    <i class="fas fa-sync-alt"></i> Refresh Now
+                                </button>
+                                <button class="btn btn-custom" onclick="exportData()">
+                                    <i class="fas fa-download"></i> Export
+                                </button>
+                                <button class="btn btn-custom" onclick="fullscreen()">
+                                    <i class="fas fa-expand"></i> Fullscreen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content Tabs -->
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-analytics-tab" data-bs-toggle="tab" data-bs-target="#nav-analytics" type="button" role="tab">
+                    <i class="fas fa-chart-line"></i> Live Analytics
+                </button>
+                <button class="nav-link" id="nav-interactive-tab" data-bs-toggle="tab" data-bs-target="#nav-interactive" type="button" role="tab">
+                    <i class="fas fa-mouse-pointer"></i> Interactive Charts
+                </button>
+                <button class="nav-link" id="nav-alerts-tab" data-bs-toggle="tab" data-bs-target="#nav-alerts" type="button" role="tab">
+                    <i class="fas fa-bell"></i> Live Alerts
+                </button>
+                <button class="nav-link" id="nav-predictions-tab" data-bs-toggle="tab" data-bs-target="#nav-predictions" type="button" role="tab">
+                    <i class="fas fa-crystal-ball"></i> Predictions
+                </button>
+                <button class="nav-link" id="nav-monitoring-tab" data-bs-toggle="tab" data-bs-target="#nav-monitoring" type="button" role="tab">
+                    <i class="fas fa-desktop"></i> System Monitoring
+                </button>
+            </div>
+        </nav>
+        
+        <div class="tab-content" id="nav-tabContent">
+            <!-- Live Analytics Tab -->
+            <div class="tab-pane fade show active" id="nav-analytics" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <h5><i class="fas fa-exclamation-triangle"></i> Live Churn Risk Distribution</h5>
+                            <div id="churnRiskChart"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <h5><i class="fas fa-money-bill-trend-up"></i> Live Revenue Stream</h5>
+                            <div id="revenueStreamChart"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="chart-container">
+                            <h5><i class="fas fa-fire"></i> Interactive Cohort Heatmap</h5>
+                            <div id="cohortHeatmap"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Interactive Charts Tab -->
+            <div class="tab-pane fade" id="nav-interactive" role="tabpanel">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Chart Type</label>
+                        <select class="form-select" id="chartType" onchange="updateInteractiveChart()">
+                            <option value="funnel">Customer Journey Funnel</option>
+                            <option value="pie">Revenue by Plan</option>
+                            <option value="scatter">Engagement vs Retention</option>
+                            <option value="treemap">Feature Usage Breakdown</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Data Granularity</label>
+                        <select class="form-select" id="granularity" onchange="updateInteractiveChart()">
+                            <option value="hourly">Hourly</option>
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Animation</label>
+                        <div class="form-check form-switch mt-2">
+                            <input class="form-check-input" type="checkbox" id="animationEnabled" checked onchange="updateInteractiveChart()">
+                            <label class="form-check-label" for="animationEnabled">Enable Animations</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div id="interactiveChart"></div>
+                </div>
+            </div>
+            
+            <!-- Live Alerts Tab -->
+            <div class="tab-pane fade" id="nav-alerts" role="tabpanel">
+                <div class="alert-panel">
+                    <h5><i class="fas fa-bell"></i> Live Alerts & Notifications</h5>
+                    <div id="alertsContainer">
+                        <!-- Alerts will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Predictions Tab -->
+            <div class="tab-pane fade" id="nav-predictions" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <h5><i class="fas fa-chart-line"></i> Churn Forecast (30 Days)</h5>
+                            <div id="churnForecastChart"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <h5><i class="fas fa-trending-up"></i> Revenue Prediction</h5>
+                            <div id="revenueForecastChart"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="chart-container">
+                            <h5><i class="fas fa-brain"></i> ML Model Performance</h5>
+                            <div id="modelPerformanceChart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- System Monitoring Tab -->
+            <div class="tab-pane fade" id="nav-monitoring" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="metric-card text-center">
+                            <h6><i class="fas fa-server"></i> System Status</h6>
+                            <span class="status-badge status-live">LIVE</span>
+                            <div class="mt-2">
+                                <small class="text-muted">Uptime: 99.9%</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="metric-card text-center">
+                            <h6><i class="fas fa-database"></i> Data Sources</h6>
+                            <span class="status-badge status-live">5 ACTIVE</span>
+                            <div class="mt-2">
+                                <small class="text-muted">Last sync: 2 min ago</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="metric-card text-center">
+                            <h6><i class="fas fa-wifi"></i> API Health</h6>
+                            <span class="status-badge status-live">HEALTHY</span>
+                            <div class="mt-2">
+                                <small class="text-muted">Response: 125ms</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <h5><i class="fas fa-tachometer-alt"></i> System Performance</h5>
+                    <div id="systemPerformanceChart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Global variables
+        let autoRefreshInterval;
+        let liveData = {};
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+            startAutoRefresh();
+            loadLiveCharts();
+        });
+        
+        // Initialize dashboard
+        function initializeDashboard() {
+            updateLastUpdateTime();
+            generateLiveAlerts();
+            
+            // Set up event listeners
+            document.getElementById('timeRange').addEventListener('change', updateChartsWithFilter);
+            document.getElementById('customerSegment').addEventListener('change', updateChartsWithFilter);
+            document.getElementById('autoRefresh').addEventListener('change', toggleAutoRefresh);
+        }
+        
+        // Update last update time
+        function updateLastUpdateTime() {
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+        }
+        
+        // Start auto refresh
+        function startAutoRefresh() {
+            if (document.getElementById('autoRefresh').checked) {
+                autoRefreshInterval = setInterval(() => {
+                    refreshData();
+                }, 5000); // Refresh every 5 seconds
+            }
+        }
+        
+        // Toggle auto refresh
+        function toggleAutoRefresh() {
+            if (document.getElementById('autoRefresh').checked) {
+                startAutoRefresh();
+            } else {
+                clearInterval(autoRefreshInterval);
+            }
+        }
+        
+        // Refresh data
+        function refreshData() {
+            updateLiveMetrics();
+            updateLastUpdateTime();
+            loadLiveCharts();
+            generateLiveAlerts();
+            
+            // Show refresh indicator
+            showNotification('Data refreshed successfully!', 'success');
+        }
+        
+        // Update live metrics with animation
+        function updateLiveMetrics() {
+            // Generate new random values
+            const metrics = {
+                churnRate: 14.9 + (Math.random() - 0.5) * 1,
+                monthlyRevenue: 10887 + (Math.random() - 0.5) * 500,
+                arpu: 18.05 + (Math.random() - 0.5) * 2,
+                activeUsers: 1000 + Math.floor((Math.random() - 0.5) * 20)
+            };
+            
+            // Update with animation
+            animateMetricUpdate('churnRate', metrics.churnRate.toFixed(1) + '%');
+            animateMetricUpdate('monthlyRevenue', '$' + metrics.monthlyRevenue.toLocaleString());
+            animateMetricUpdate('arpu', '$' + metrics.arpu.toFixed(2));
+            animateMetricUpdate('activeUsers', metrics.activeUsers.toLocaleString());
+            
+            // Update change indicators
+            updateChangeIndicator('churnChange', (Math.random() - 0.5) * 0.6);
+            updateChangeIndicator('revenueChange', (Math.random() - 0.5) * 400, '$');
+            updateChangeIndicator('arpuChange', (Math.random() - 0.5) * 1, '$');
+            updateChangeIndicator('usersChange', Math.floor((Math.random() - 0.5) * 10));
+        }
+        
+        // Animate metric update
+        function animateMetricUpdate(elementId, newValue) {
+            const element = document.getElementById(elementId);
+            element.style.transform = 'scale(1.1)';
+            element.style.color = '#667eea';
+            
+            setTimeout(() => {
+                element.textContent = newValue;
+                element.style.transform = 'scale(1)';
+            }, 150);
+        }
+        
+        // Update change indicator
+        function updateChangeIndicator(elementId, change, prefix = '') {
+            const element = document.getElementById(elementId);
+            const isPositive = change > 0;
+            
+            element.textContent = (isPositive ? '+' : '') + prefix + change.toFixed(change % 1 === 0 ? 0 : 2);
+            element.className = 'metric-change ' + (isPositive ? 'positive' : 'negative');
+        }
+        
+        // Load live charts
+        function loadLiveCharts() {
+            createChurnRiskChart();
+            createRevenueStreamChart();
+            createCohortHeatmap();
+            createForecastCharts();
+            createSystemPerformanceChart();
+        }
+        
+        // Create churn risk chart
+        function createChurnRiskChart() {
+            const data = [{
+                x: ['Low Risk', 'Medium Risk', 'High Risk', 'Critical Risk'],
+                y: [350 + Math.random() * 50, 150 + Math.random() * 50, 80 + Math.random() * 30, 25 + Math.random() * 15],
+                type: 'bar',
+                marker: {
+                    color: ['#28a745', '#ffc107', '#fd7e14', '#dc3545']
+                },
+                text: 'Customer Count',
+                hovertemplate: '<b>%{x}</b><br>Customers: %{y}<extra></extra>'
+            }];
+            
+            const layout = {
+                title: '',
+                xaxis: { title: 'Risk Level' },
+                yaxis: { title: 'Number of Customers' },
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                font: { family: 'Segoe UI' }
+            };
+            
+            Plotly.newPlot('churnRiskChart', data, layout, {responsive: true});
+        }
+        
+        // Create revenue stream chart
+        function createRevenueStreamChart() {
+            const hours = [];
+            const revenue = [];
+            const now = new Date();
+            
+            for (let i = 23; i >= 0; i--) {
+                const time = new Date(now.getTime() - i * 60 * 60 * 1000);
+                hours.push(time.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'}));
+                
+                // Simulate realistic hourly variations
+                const hourOfDay = time.getHours();
+                let multiplier = 1;
+                
+                if (hourOfDay >= 9 && hourOfDay <= 17) {
+                    multiplier = 1.5; // Business hours
+                } else if (hourOfDay >= 18 && hourOfDay <= 23) {
+                    multiplier = 1.0; // Evening
+                } else {
+                    multiplier = 0.5; // Night/early morning
+                }
+                
+                revenue.push(450 * multiplier + (Math.random() - 0.5) * 100);
+            }
+            
+            const data = [{
+                x: hours,
+                y: revenue,
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Hourly Revenue',
+                line: { color: '#667eea', width: 3 },
+                fill: 'tonexty',
+                fillcolor: 'rgba(102, 126, 234, 0.1)',
+                hovertemplate: '<b>%{x}</b><br>Revenue: $%{y:.0f}<extra></extra>'
+            }];
+            
+            const layout = {
+                title: '',
+                xaxis: { title: 'Time' },
+                yaxis: { title: 'Revenue ($)' },
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                font: { family: 'Segoe UI' }
+            };
+            
+            Plotly.newPlot('revenueStreamChart', data, layout, {responsive: true});
+        }
+        
+        // Create cohort heatmap
+        function createCohortHeatmap() {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const periods = Array.from({length: 12}, (_, i) => i);
+            
+            // Generate retention data
+            const retentionData = months.map(() => {
+                return periods.map(period => {
+                    if (period === 0) return 100;
+                    return 100 * Math.pow(0.85, period) + (Math.random() - 0.5) * 10;
+                });
+            });
+            
+            const data = [{
+                z: retentionData,
+                x: periods,
+                y: months,
+                type: 'heatmap',
+                colorscale: 'RdYlGn',
+                hovertemplate: '<b>Month: %{y}</b><br>Period: %{x}<br>Retention: %{z:.1f}%<extra></extra>'
+            }];
+            
+            const layout = {
+                title: '',
+                xaxis: { title: 'Periods After First Purchase' },
+                yaxis: { title: 'Acquisition Month' },
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                font: { family: 'Segoe UI' }
+            };
+            
+            Plotly.newPlot('cohortHeatmap', data, layout, {responsive: true});
+        }
+        
+        // Create forecast charts
+        function createForecastCharts() {
+            // Churn forecast
+            const days = Array.from({length: 30}, (_, i) => i + 1);
+            const churnForecast = days.map(day => 14.9 + day * 0.1 + (Math.random() - 0.5) * 0.5);
+            
+            const churnData = [{
+                x: days,
+                y: churnForecast,
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Predicted Churn Rate',
+                line: { color: '#dc3545', width: 3 }
+            }];
+            
+            Plotly.newPlot('churnForecastChart', churnData, {
+                title: '',
+                xaxis: { title: 'Days' },
+                yaxis: { title: 'Churn Rate (%)' },
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                font: { family: 'Segoe UI' }
+            }, {responsive: true});
+            
+            // Revenue forecast
+            const revenueForecast = days.map(day => 10887 + day * 50 + (Math.random() - 0.5) * 200);
+            
+            const revenueData = [{
+                x: days,
+                y: revenueForecast,
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Predicted Revenue',
+                line: { color: '#28a745', width: 3 },
+                fill: 'tonexty',
+                fillcolor: 'rgba(40, 167, 69, 0.1)'
+            }];
+            
+            Plotly.newPlot('revenueForecastChart', revenueData, {
+                title: '',
+                xaxis: { title: 'Days' },
+                yaxis: { title: 'Revenue ($)' },
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                font: { family: 'Segoe UI' }
+            }, {responsive: true});
+        }
+        
+        // Create system performance chart
+        function createSystemPerformanceChart() {
+            const timePoints = Array.from({length: 20}, (_, i) => {
+                const time = new Date(Date.now() - (19 - i) * 60000);
+                return time.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'});
+            });
+            
+            const cpuUsage = timePoints.map(() => 20 + Math.random() * 30);
+            const memoryUsage = timePoints.map(() => 40 + Math.random() * 20);
+            const apiLatency = timePoints.map(() => 100 + Math.random() * 50);
+            
+            const data = [
+                {
+                    x: timePoints,
+                    y: cpuUsage,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: 'CPU Usage (%)',
+                    line: { color: '#ffc107' }
+                },
+                {
+                    x: timePoints,
+                    y: memoryUsage,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: 'Memory Usage (%)',
+                    line: { color: '#17a2b8' }
+                },
+                {
+                    x: timePoints,
+                    y: apiLatency,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: 'API Latency (ms)',
+                    yaxis: 'y2',
+                    line: { color: '#dc3545' }
+                }
+            ];
+            
+            const layout = {
+                title: '',
+                xaxis: { title: 'Time' },
+                yaxis: { title: 'Usage (%)' },
+                yaxis2: {
+                    title: 'Latency (ms)',
+                    overlaying: 'y',
+                    side: 'right'
+                },
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                font: { family: 'Segoe UI' }
+            };
+            
+            Plotly.newPlot('systemPerformanceChart', data, layout, {responsive: true});
+        }
+        
+        // Generate live alerts
+        function generateLiveAlerts() {
+            const alerts = [
+                {
+                    type: 'danger',
+                    icon: 'fas fa-exclamation-circle',
+                    title: 'High Churn Alert',
+                    message: 'Churn rate increased 15% in premium segment',
+                    time: Math.floor(Math.random() * 10) + ' minutes ago'
+                },
+                {
+                    type: 'warning',
+                    icon: 'fas fa-exclamation-triangle',
+                    title: 'Revenue Drop',
+                    message: 'MRR decreased $340 from last week',
+                    time: Math.floor(Math.random() * 30) + ' minutes ago'
+                },
+                {
+                    type: 'success',
+                    icon: 'fas fa-check-circle',
+                    title: 'Conversion Spike',
+                    message: 'Trial-to-paid conversion up 23%',
+                    time: Math.floor(Math.random() * 60) + ' minutes ago'
+                },
+                {
+                    type: 'info',
+                    icon: 'fas fa-info-circle',
+                    title: 'New Cohort Data',
+                    message: 'October cohort analysis complete',
+                    time: '1 hour ago'
+                }
+            ];
+            
+            const container = document.getElementById('alertsContainer');
+            container.innerHTML = alerts.map(alert => `
+                <div class="alert-item alert-${alert.type}">
+                    <div class="text-center" style="min-width: 50px;">
+                        <i class="${alert.icon} fa-2x"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1">${alert.title}</h6>
+                        <p class="mb-1">${alert.message}</p>
+                        <small class="text-muted">${alert.time}</small>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary" onclick="viewAlertDetails('${alert.title}')">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Update interactive chart
+        function updateInteractiveChart() {
+            const chartType = document.getElementById('chartType').value;
+            const animationEnabled = document.getElementById('animationEnabled').checked;
+            
+            let data, layout;
+            
+            switch (chartType) {
+                case 'funnel':
+                    data = [{
+                        type: 'funnel',
+                        y: ['Visitors', 'Sign-ups', 'Trial', 'Paid', 'Retained'],
+                        x: [10000, 2500, 1800, 1200, 1020],
+                        textinfo: 'value+percent initial',
+                        marker: { color: ['royalblue', 'lightblue', 'lightgreen', 'gold', 'orange'] }
+                    }];
+                    layout = { title: 'Customer Journey Funnel' };
+                    break;
+                    
+                case 'pie':
+                    data = [{
+                        type: 'pie',
+                        labels: ['Basic', 'Premium', 'Enterprise'],
+                        values: [3200, 5800, 1887],
+                        hole: 0.4,
+                        marker: { colors: ['#ff9999', '#66b3ff', '#99ff99'] }
+                    }];
+                    layout = { title: 'Revenue by Plan Type' };
+                    break;
+                    
+                case 'scatter':
+                    const x = Array.from({length: 100}, () => Math.random() * 100);
+                    const y = x.map(val => val * 0.8 + Math.random() * 20);
+                    data = [{
+                        x: x,
+                        y: y,
+                        mode: 'markers',
+                        type: 'scatter',
+                        marker: { size: 8, color: x, colorscale: 'Viridis' },
+                        name: 'Customers'
+                    }];
+                    layout = { 
+                        title: 'Engagement vs Retention',
+                        xaxis: { title: 'Engagement Score' },
+                        yaxis: { title: 'Retention Rate (%)' }
+                    };
+                    break;
+                    
+                case 'treemap':
+                    data = [{
+                        type: 'treemap',
+                        labels: ['Dashboard', 'Reports', 'Analytics', 'Export', 'Settings', 'API'],
+                        parents: ['', '', '', '', '', ''],
+                        values: [450, 320, 280, 180, 120, 80],
+                        textinfo: 'label+value',
+                        marker: { colorscale: 'Blues' }
+                    }];
+                    layout = { title: 'Feature Usage Breakdown' };
+                    break;
+            }
+            
+            const config = {
+                responsive: true,
+                displayModeBar: true,
+                modeBarButtonsToAdd: ['drawline', 'drawopenpath', 'drawclosedpath', 'drawcircle', 'drawrect', 'eraseshape']
+            };
+            
+            if (animationEnabled) {
+                layout.transition = { duration: 500, easing: 'cubic-in-out' };
+            }
+            
+            Plotly.newPlot('interactiveChart', data, layout, config);
+        }
+        
+        // Utility functions
+        function updateChartsWithFilter() {
+            showNotification('Filters applied successfully!', 'info');
+            refreshData();
+        }
+        
+        function viewAlertDetails(title) {
+            showNotification(`Opening details for: ${title}`, 'info');
+        }
+        
+        function exportData() {
+            showNotification('Exporting dashboard data...', 'success');
+        }
+        
+        function fullscreen() {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            }
+        }
+        
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} position-fixed`;
+            notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check' : type === 'warning' ? 'exclamation-triangle' : 'info'}-circle"></i>
+                ${message}
+                <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+        
+        // Initialize interactive chart
+        setTimeout(() => {
+            updateInteractiveChart();
+        }, 1000);
+    </script>
+</body>
+</html>
